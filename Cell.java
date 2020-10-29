@@ -18,7 +18,5 @@ public class Cell{
         status = c;
     }//setStatus
 
-    public String toString(){
-        String cellString = 
-    }
+
 }//cell class
