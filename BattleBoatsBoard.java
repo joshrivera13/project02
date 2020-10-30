@@ -24,18 +24,18 @@ public class BattleBoatsBoard{
         turn = 0;
         if (size == 8){
             boatsRemaining = 5;
-            boatList = new BattleBoat[1];
-            BattleBoat boat50 = new BattleBoat(5);
-            //BattleBoat boat40 = new BattleBoat(4);
-            //BattleBoat boat30 = new BattleBoat(3);
-            //BattleBoat boat31 = new BattleBoat(3);
-            //BattleBoat boat20 = new BattleBoat(2);
+            boatList = new BattleBoat[boatsRemaining];
+            BattleBoat boat50 = new BattleBoat(2);
+            BattleBoat boat40 = new BattleBoat(2);
+            BattleBoat boat30 = new BattleBoat(4);
+            BattleBoat boat31 = new BattleBoat(3);
+            BattleBoat boat20 = new BattleBoat(2);
 
             boatList[0] = boat50;
-            //boatList[1] = boat40;
-            //boatList[2] = boat30;
-            //boatList[3] = boat31;
-            //boatList[4] = boat20;
+            boatList[1] = boat40;
+            boatList[2] = boat30;
+            boatList[3] = boat31;
+            boatList[4] = boat20;
         }//standard mode
         else {
             boatsRemaining = 10;
@@ -65,95 +65,101 @@ public class BattleBoatsBoard{
             if (boatList[i].getOrientation() == true){
                 boolean boatCheck = false;
                 boolean fitCheck = false;
-                int boatX = 0;
-                int boatY = 0;
+                int boatCol = 0;
+                int boatRow = 0;
 
-                while (boatCheck == false && fitCheck == false){
+                do {
+                    boatCheck = false;
+                    fitCheck = false;
                     //get first coords
                     double x, y;
-                    int xInt, yInt;
                     x = Math.random() * 10;
                     if (x > gameBoard.length){
                         x = x - 2;
                     }
-                    y = Math.random() * 10;
-                    if (y > gameBoard.length){
-                        y = y - 2;
+                    y = Math.random() * (gameBoard.length - 1) - boatList[i].getSize();
+                    if (y < 0){
+                        y = y * (-1);
                     }
-                    xInt = (int)Math.floor(x);
-                    yInt = (int)Math.floor(y);
-                    //checking if boat fits
-                    if (boatList[i].getSize() + xInt < gameBoard.length){
-                        fitCheck = true;
-                    }
+                    boatCol = (int)Math.floor(x);
+                    boatRow = (int)Math.floor(y);
+
+
                     //checking if there are other boats in the way
-                    for (int b = xInt; b < gameBoard.length; b++){
-                        if(b == (gameBoard.length - 1) && gameBoard[b][yInt].getStatus() != 'B'){
+                    for (int b = boatCol; b < gameBoard.length; b++){
+                        if(gameBoard[b][boatRow].getStatus() == 'B'){
+                            continue;
+                        }
+                        if(b == (gameBoard.length - 1)){
                             boatCheck = true;
                         }
                     }//for
-                    boatX = xInt;
-                    boatY = yInt;
-                }//while loop
-                /**
+
+                } while (boatCheck == false && fitCheck == false);//while loop
+                System.out.println("X: " + boatCol + "\n" + "Y: " + boatRow + "\n" + "Orientation: " +
+                        boatList[i].getOrientation());
+
                 //getting rest of the coordinates
                 for (int c = 0; c < boatList.length; c++){
                     for (int j = 0; j < boatList[c].getSize(); j++){
-                        boatList[c].setLocation(gameBoard[boatX + j][boatY], j);
-                        gameBoard[boatX + j][boatY].setStatus('B');
+                        boatList[c].setLocation(gameBoard[boatRow + j][boatCol], j);
+                        gameBoard[boatRow + j][boatCol].setStatus('B');
                     }//for loop for boat cell array
                 }//for loop for going thru boatList
-                 **/
-                System.out.println("X: " + boatX + "\n" + "Y: " + boatY + "\n");
+
+
             }//if vertical
 
             //horizontal boats
              else if (boatList[i].getOrientation() == false){
                 boolean boatCheck = false;
                 boolean fitCheck = false;
-                int boatX = 0;
-                int boatY = 0;
-                while (boatCheck == false && fitCheck == false){
+                int boatCol = 0;
+                int boatRow = 0;
+                do {
+                    boatCheck = false;
+                    fitCheck = false;
                     //get first coords
                     double x, y;
-                    int xInt, yInt;
-                    x = Math.random() * 10;
-                    if (x > gameBoard.length){
-                        x = x - 2;
+                    x = Math.random() * (gameBoard.length - 1) - boatList[i].getSize();
+                    if (x < 0){
+                        x = x * (-1);
                     }
                     y = Math.random() * 10;
-                    if (y > gameBoard.length){
+                    if (y > gameBoard.length - 1){
                         y = y - 2;
                     }
-                    xInt = (int)Math.floor(x);
-                    yInt = (int)Math.floor(y);
-                    //checking if boat fits
-                    if (boatList[i].getSize() + yInt < gameBoard[0].length){
-                        fitCheck = true;
-                    }
+                    boatCol = (int)Math.floor(x);
+                    boatRow = (int)Math.floor(y);
+
                     //checking if there are other boats in the way
-                    for (int b = yInt; b < gameBoard.length; b++){
-                        if(b == (gameBoard.length - 1) && gameBoard[xInt][b].getStatus() != 'B'){
+                    for (int b = boatRow; b < gameBoard.length; b++){
+                        if(gameBoard[boatCol][b].getStatus() == 'B'){
+                            continue;
+                        }
+                        if(b == (gameBoard.length - 1)){
                             boatCheck = true;
                         }
                     }//for
-                    boatX = xInt;
-                    boatY = yInt;
-                }//while loop
-                /**
+
+                } while (boatCheck == false && fitCheck == false);//while loop
+                System.out.println("X: " + boatCol + "\n" + "Y: " + boatRow + "\n" + "Orientation: " +
+                        boatList[i].getOrientation());
+
                 //getting rest of the coordinates
                 for (int c = 0; c < boatList.length; c++){
                     for (int j = 0; j < boatList[c].getSize(); j++){
-                        boatList[c].setLocation(gameBoard[boatX][boatY + j], j);
-                        gameBoard[boatX][boatY + j].setStatus('B');
+                        boatList[c].setLocation(gameBoard[boatRow][boatCol + j], j);
+                        gameBoard[boatRow][boatCol + j].setStatus('B');
                     }//for loop for boat cell array
                 }//for loop for going thru boatList
-                 **/
-                System.out.println("X: " + boatX + "\n" + "Y: " + boatY + "\n");
+
+
             }//if horizontal
         }//for
 
     }//placeBoats
+
 
 
 
